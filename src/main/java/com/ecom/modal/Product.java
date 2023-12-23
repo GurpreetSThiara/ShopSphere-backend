@@ -59,6 +59,9 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProductImage> images;
+
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)
 
     private List<Rating>ratings=new ArrayList<>();
@@ -68,6 +71,10 @@ public class Product {
 
     @Column(name = "num_ratings")
     private int numRatings;
+
+	@ManyToOne
+	@JoinColumn(name = "seller_id")
+	private Long sellerShopId;
     
 
     @ManyToOne()
@@ -80,10 +87,8 @@ public class Product {
 		
 	}
 
-	public Product(Long id, String title, String description, int price, int discountedPrice, int discountPersent,
-			int quantity, String brand, String color, Set<Size> sizes, String imageUrl, List<Rating> ratings,
-			List<Review> reviews, int numRatings, Category category, LocalDateTime createdAt) {
-		super();
+	public Product(Long id, String title, String description, int price, int discountedPrice, int discountPersent, int quantity, String brand, String color, Set<Size> sizes, String imageUrl, List<ProductImage> images, List<Rating> ratings, List<Review> reviews, int numRatings, Long sellerId, Category category, LocalDateTime createdAt) {
+
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -95,42 +100,13 @@ public class Product {
 		this.color = color;
 		this.sizes = sizes;
 		this.imageUrl = imageUrl;
+		this.images = images;
 		this.ratings = ratings;
 		this.reviews = reviews;
 		this.numRatings = numRatings;
+		this.sellerShopId = sellerId;
 		this.category = category;
 		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-	public List<Rating> getRatings() {
-		return ratings;
-	}
-
-	public void setRatings(List<Rating> ratings) {
-		this.ratings = ratings;
-	}
-
-	public List<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<Review> reviews) {
-		this.reviews = reviews;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public Long getId() {
@@ -139,6 +115,14 @@ public class Product {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDescription() {
@@ -197,12 +181,44 @@ public class Product {
 		this.color = color;
 	}
 
+	public Set<Size> getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(Set<Size> sizes) {
+		this.sizes = sizes;
+	}
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public List<ProductImage> getImages() {
+		return images;
+	}
+
+	public void setImages(List<ProductImage> images) {
+		this.images = images;
+	}
+
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
 	}
 
 	public int getNumRatings() {
@@ -213,6 +229,14 @@ public class Product {
 		this.numRatings = numRatings;
 	}
 
+	public Long getSellerId() {
+		return sellerShopId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerShopId = sellerId;
+	}
+
 	public Category getCategory() {
 		return category;
 	}
@@ -221,12 +245,12 @@ public class Product {
 		this.category = category;
 	}
 
-	public Set<Size> getSizes() {
-		return sizes;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setSizes(Set<Size> sizes) {
-		this.sizes = sizes;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	@Override
@@ -252,8 +276,6 @@ public class Product {
 				&& Objects.equals(ratings, other.ratings) && Objects.equals(reviews, other.reviews)
 				&& Objects.equals(sizes, other.sizes) && Objects.equals(title, other.title);
 	}
-
-	
 
    
 }

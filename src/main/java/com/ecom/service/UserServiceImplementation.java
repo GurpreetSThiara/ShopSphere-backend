@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.ecom.config.JwtTokenProvider;
 import com.ecom.exception.UserException;
+import com.ecom.modal.Address;
 import com.ecom.modal.User;
 import com.ecom.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,7 @@ public class UserServiceImplementation implements UserService {
 		System.out.println("email user"+user.getEmail());
 		return user;
 	}
+
+
 
 }
