@@ -11,7 +11,7 @@ import com.ecom.request.CreateProductRequest;
 public interface ProductService {
 	
 	// only for admin
-	public Product createProduct(CreateProductRequest req) throws ProductException;
+	public Product createProduct(CreateProductRequest req , String email) throws ProductException;
 
 
 	

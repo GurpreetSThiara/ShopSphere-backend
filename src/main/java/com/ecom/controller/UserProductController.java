@@ -3,7 +3,10 @@ package com.ecom.controller;
 import java.util.List;
 
 import com.ecom.modal.Product;
+import com.ecom.modal.Shop;
 import com.ecom.service.ProductService;
+import com.ecom.service.SellerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,9 @@ public class UserProductController {
 	
 
 	private ProductService productService;
+
+	@Autowired
+	private SellerService sellerService;
 	
 	public UserProductController(ProductService productService) {
 		this.productService=productService;
@@ -59,5 +65,14 @@ public class UserProductController {
 		
 		return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
 		
+	}
+
+	@GetMapping("/shops")
+	public ResponseEntity<List<Shop>> getAllShopsHandler(){
+
+		List<Shop> shops=sellerService.getAllShops();
+
+		return new ResponseEntity<List<Shop>>(shops,HttpStatus.OK);
+
 	}
 }

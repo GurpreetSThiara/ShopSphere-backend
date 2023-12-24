@@ -52,6 +52,11 @@ public class SellerAuthController {
         String password = seller.getPassword();
         String firstName=seller.getFirstName();
         String lastName=seller.getLastName();
+        String description = seller.getDescription();
+        String mobile = seller.getMobile();
+        String shopName = seller.getShopName();
+        String logoUrl = seller.getLogoImageUrl();
+
 
         Seller isEmailExist=sellerRepository.findByEmail(email);
         if (isEmailExist!=null) {
@@ -64,6 +69,10 @@ public class SellerAuthController {
         createdSeller.setFirstName(firstName);
         createdSeller.setLastName(lastName);
         createdSeller.setPassword(passwordEncoder.encode(password));
+        createdSeller.setDescription(description);
+        createdSeller.setMobile(mobile);
+        createdSeller.setShopName(shopName);
+        createdSeller.setLogoImageUrl(logoUrl);
 
 
 

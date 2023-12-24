@@ -24,7 +24,7 @@ public class AdminProductController {
 	@PostMapping("/")
 	public ResponseEntity<Product> createProductHandler(@RequestBody CreateProductRequest req) throws ProductException{
 		
-		Product createdProduct = productService.createProduct(req);
+		Product createdProduct = productService.createProduct(req,"");
 		
 		return new ResponseEntity<Product>(createdProduct,HttpStatus.ACCEPTED);
 		
@@ -62,7 +62,7 @@ public class AdminProductController {
 	public ResponseEntity<ApiResponse> createMultipleProduct(@RequestBody CreateProductRequest[] reqs) throws ProductException{
 		
 		for(CreateProductRequest product:reqs) {
-			productService.createProduct(product);
+			productService.createProduct(product , "");
 		}
 		
 		ApiResponse res=new ApiResponse("products created successfully",true);

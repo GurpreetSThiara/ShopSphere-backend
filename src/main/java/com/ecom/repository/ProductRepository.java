@@ -33,4 +33,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			@Param("minDiscount") Integer minDiscount,
 			@Param("sort") String sort
 			);
+
+	@Query("SELECT p FROM Product p WHERE p.sellerShopId = :sellerShopId")
+	List<Product> findBySellerShopId(@Param("sellerShopId") Long sellerShopId);
+
+
 }

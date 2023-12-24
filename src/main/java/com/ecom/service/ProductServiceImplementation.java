@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 import com.ecom.exception.ProductException;
 import com.ecom.modal.Category;
 import com.ecom.modal.Product;
+import com.ecom.modal.Seller;
 import com.ecom.repository.CategoryRepository;
 import com.ecom.repository.ProductRepository;
+import com.ecom.repository.SellerRepository;
 import com.ecom.request.CreateProductRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +27,9 @@ public class ProductServiceImplementation implements ProductService {
 	private ProductRepository productRepository;
 	private UserService userService;
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private SellerRepository sellerRepository;
 	
 	public ProductServiceImplementation(ProductRepository productRepository,UserService userService,CategoryRepository categoryRepository) {
 		this.productRepository=productRepository;
@@ -33,7 +39,7 @@ public class ProductServiceImplementation implements ProductService {
 	
 
 	@Override
-	public Product createProduct(CreateProductRequest req) {
+	public Product createProduct(CreateProductRequest req , String email) {
 		
 		Category topLevel=categoryRepository.findByName(req.getTopLavelCategory());
 		
@@ -67,10 +73,12 @@ public class ProductServiceImplementation implements ProductService {
 			thirdLavelCategory.setLevel(3);
 			
 			thirdLevel=categoryRepository.save(thirdLavelCategory);
+
 		}
-		
+		Seller seller = sellerRepository.findByEmail(email);
 		
 		Product product=new Product();
+		product.setSellerShopId(seller.getSellerShopId());
 		product.setTitle(req.getTitle());
 		product.setColor(req.getColor());
 		product.setDescription(req.getDescription());
@@ -83,6 +91,8 @@ public class ProductServiceImplementation implements ProductService {
 		product.setQuantity(req.getQuantity());
 		product.setCategory(thirdLevel);
 		product.setCreatedAt(LocalDateTime.now());
+		product.setImages(req.getImages());
+
 		
 		Product savedProduct= productRepository.save(product);
 		

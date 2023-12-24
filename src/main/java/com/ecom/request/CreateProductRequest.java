@@ -1,6 +1,7 @@
 package com.ecom.request;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.ecom.modal.Size;
@@ -32,19 +33,26 @@ public class CreateProductRequest {
     private String secondLavelCategory;
     private String thirdLavelCategory;
 
-	public Set<Size> getSize() {
-		return size;
+	private List<String> images;
+
+	private Long sellerShopId;
+
+	public Long getSellerShopId() {
+		return sellerShopId;
 	}
-	public void setSize(Set<Size> size) {
-		this.size = size;
+
+	public void setSellerShopId(Long sellerShopId) {
+		this.sellerShopId = sellerShopId;
 	}
 
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -101,6 +109,14 @@ public class CreateProductRequest {
 		this.color = color;
 	}
 
+	public Set<Size> getSize() {
+		return size;
+	}
+
+	public void setSize(Set<Size> size) {
+		this.size = size;
+	}
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
@@ -133,7 +149,33 @@ public class CreateProductRequest {
 		this.thirdLavelCategory = thirdLavelCategory;
 	}
 
-	
-    
-    
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+
+	public CreateProductRequest(String title, String description, int price, int discountedPrice, int discountPersent, int quantity, String brand, String color, Set<Size> size, String imageUrl, String topLavelCategory, String secondLavelCategory, String thirdLavelCategory, List<String> images, Long sellerShopId) {
+		this.title = title;
+		this.description = description;
+		this.price = price;
+		this.discountedPrice = discountedPrice;
+		this.discountPersent = discountPersent;
+		this.quantity = quantity;
+		this.brand = brand;
+		this.color = color;
+		this.size = size;
+		this.imageUrl = imageUrl;
+		this.topLavelCategory = topLavelCategory;
+		this.secondLavelCategory = secondLavelCategory;
+		this.thirdLavelCategory = thirdLavelCategory;
+		this.images = images;
+		this.sellerShopId = sellerShopId;
+	}
+
+	public CreateProductRequest() {
+
+	}
 }

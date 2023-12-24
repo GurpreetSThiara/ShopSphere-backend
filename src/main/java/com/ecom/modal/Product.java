@@ -59,8 +59,11 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductImage> images;
+//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<ProductImage> images;
+
+	@ElementCollection
+	private List<String> images;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)
 
@@ -72,8 +75,7 @@ public class Product {
     @Column(name = "num_ratings")
     private int numRatings;
 
-	@ManyToOne
-	@JoinColumn(name = "seller_id")
+
 	private Long sellerShopId;
     
 
@@ -87,8 +89,7 @@ public class Product {
 		
 	}
 
-	public Product(Long id, String title, String description, int price, int discountedPrice, int discountPersent, int quantity, String brand, String color, Set<Size> sizes, String imageUrl, List<ProductImage> images, List<Rating> ratings, List<Review> reviews, int numRatings, Long sellerId, Category category, LocalDateTime createdAt) {
-
+	public Product(Long id, String title, String description, int price, int discountedPrice, int discountPersent, int quantity, String brand, String color, Set<Size> sizes, String imageUrl, List<String> images, List<Rating> ratings, List<Review> reviews, int numRatings, Long sellerShopId, Category category, LocalDateTime createdAt) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -104,7 +105,7 @@ public class Product {
 		this.ratings = ratings;
 		this.reviews = reviews;
 		this.numRatings = numRatings;
-		this.sellerShopId = sellerId;
+		this.sellerShopId = sellerShopId;
 		this.category = category;
 		this.createdAt = createdAt;
 	}
@@ -197,11 +198,11 @@ public class Product {
 		this.imageUrl = imageUrl;
 	}
 
-	public List<ProductImage> getImages() {
+	public List<String> getImages() {
 		return images;
 	}
 
-	public void setImages(List<ProductImage> images) {
+	public void setImages(List<String> images) {
 		this.images = images;
 	}
 
@@ -229,12 +230,12 @@ public class Product {
 		this.numRatings = numRatings;
 	}
 
-	public Long getSellerId() {
+	public Long getSellerShopId() {
 		return sellerShopId;
 	}
 
-	public void setSellerId(Long sellerId) {
-		this.sellerShopId = sellerId;
+	public void setSellerShopId(Long sellerShopId) {
+		this.sellerShopId = sellerShopId;
 	}
 
 	public Category getCategory() {
