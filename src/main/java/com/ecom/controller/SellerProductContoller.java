@@ -36,7 +36,7 @@ public class SellerProductContoller {
 
     @GetMapping("/{sellerShopId}")
     public ResponseEntity<List<Product>> getAllShopProducts(@PathVariable Long sellerShopId, @RequestParam  int pageNumber ,@RequestParam int pageSize) throws  ProductException{
-        System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+
         List<Product> products = sellerService.getAllShopProducts(sellerShopId,pageNumber,pageSize);
 
         return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
@@ -54,7 +54,7 @@ public class SellerProductContoller {
 //        }
 
         // Now jwtToken is a String containing the JWT token
-        System.out.println("Calllllllllllllllllllllllllllllllllllllllllllllllllll");
+
         System.out.println(Authorization);
 
             String email = jwtTokenProvider.getEmailFromJwtToken(Authorization);
