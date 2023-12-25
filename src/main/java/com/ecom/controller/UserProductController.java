@@ -68,9 +68,11 @@ public class UserProductController {
 	}
 
 	@GetMapping("/shops")
-	public ResponseEntity<List<Shop>> getAllShopsHandler(){
+	public ResponseEntity<List<Shop>> getAllShopsHandler(@RequestParam int pageNumber, @RequestParam int pageSize){
 
-		List<Shop> shops=sellerService.getAllShops();
+		List<Shop> shops=sellerService.getAllShops(  pageNumber , pageSize);
+		System.out.println("ppppppppppppppppppppppppppppppppppppppppppppppppppppp");
+		System.out.println(pageNumber);
 
 		return new ResponseEntity<List<Shop>>(shops,HttpStatus.OK);
 

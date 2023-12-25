@@ -14,6 +14,16 @@ public class Shop {
     private String instagram;
     private String x;
 
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Shop() {
     }
 

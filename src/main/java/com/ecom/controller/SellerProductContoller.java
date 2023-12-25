@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/seller/products")
+@RequestMapping("/api/shop/products")
 public class SellerProductContoller {
 
     @Autowired
@@ -34,9 +34,10 @@ public class SellerProductContoller {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/id")
-    public ResponseEntity<List<Product>> getAllShopProducts(@PathVariable Long sellerShopId) throws  ProductException{
-        List<Product> products = sellerService.getAllShopProducts(sellerShopId);
+    @GetMapping("/{sellerShopId}")
+    public ResponseEntity<List<Product>> getAllShopProducts(@PathVariable Long sellerShopId, @RequestParam  int pageNumber ,@RequestParam int pageSize) throws  ProductException{
+        System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+        List<Product> products = sellerService.getAllShopProducts(sellerShopId,pageNumber,pageSize);
 
         return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
     }

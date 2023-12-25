@@ -7,18 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Product {
@@ -30,7 +19,9 @@ public class Product {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
+
+	@Lob
+	@Column(name = "description" ,columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "price")

@@ -6,6 +6,8 @@ import com.ecom.modal.Shop;
 import com.ecom.repository.ProductRepository;
 import com.ecom.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,20 +22,35 @@ public class SellerServiceImplementation implements SellerService {
     private SellerRepository sellerRepository;
 
     @Override
-    public List<Product> getAllShopProducts(Long SellerShopId) {
+    public List<Product> getAllShopProducts(Long SellerShopId , int pageNumber ,int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        return productRepository.findBySellerShopId(SellerShopId);
+        Page<Product> productPage= productRepository.findBySellerShopId(SellerShopId ,pageRequest);
+
+        return productPage.getContent();
 
     }
 
     @Override
-    public List<Shop> getAllShops() {
+    public List<Shop> getAllShops( int pageNumber ,int pageSize) {
+        // Replace with the actual sellerShopId
+        int page = 0; // Page number (0-indexed)
+        int size = 5; // Number of items per page
+
+
 
        List<Shop> allShops= new ArrayList<Shop>();
-      List<Seller> allSellers =  sellerRepository.findAllSellers();
+        PageRequest pageReq = PageRequest.of(pageNumber, pageSize);
+      Page<Seller> sellers =  sellerRepository.findAllSellers( pageReq);
+        List<Seller> allSellers = sellers.getContent();
         for (Seller seller : allSellers) {
-            List<Product> products = productRepository.findBySellerShopId(seller.getSellerShopId());
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Page<Product> productPage = productRepository.findBySellerShopId(seller.getSellerShopId(), pageRequest);
+
+            List<Product> products = productPage.getContent();
+
             Shop shop = new Shop();
+            shop.setId(seller.getSellerShopId());
             shop.setShopName(seller.getShopName());
             shop.setDescription(seller.getDescription());
             shop.setEmail(seller.getEmail());

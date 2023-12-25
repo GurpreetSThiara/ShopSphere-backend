@@ -11,9 +11,9 @@ public interface SellerService {
 
 
 
-    public List<Product> getAllShopProducts(Long SellerShopId);
+    public List<Product> getAllShopProducts(Long SellerShopId , int pageNumber ,int pageSize);
 
-    public List<Shop> getAllShops();
+    public List<Shop> getAllShops( int pageNumber ,int pageSize);
 
 
 
