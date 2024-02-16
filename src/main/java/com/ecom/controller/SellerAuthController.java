@@ -82,7 +82,7 @@ public class SellerAuthController {
 
         String token = jwtTokenProvider.generateToken(authentication);
 
-        AuthResponse authResponse= new AuthResponse(token,true);
+        AuthResponse authResponse= new AuthResponse(token,true,email);
 
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
 

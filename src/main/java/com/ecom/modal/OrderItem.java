@@ -1,6 +1,7 @@
 package com.ecom.modal;
 
 
+import com.ecom.user.domain.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -17,8 +18,21 @@ public class OrderItem {
     @ManyToOne
     private Order order;
 
+
+
     @ManyToOne
     private Product product;
+
+
+    private Long sellerId;
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
 
     private String size;
 
@@ -31,6 +45,51 @@ public class OrderItem {
     private Long userId;
 
     private LocalDateTime deliveryDate;
+
+    private LocalDateTime createdAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public PaymentDetails getPaymentDetails() {
+        return paymentDetails;
+    }
+
+    public void setPaymentDetails(PaymentDetails paymentDetails) {
+        this.paymentDetails = paymentDetails;
+    }
+
+    @OneToOne
+    private Address shippingAddress;
+
+    private OrderStatus orderStatus;
+
+
+    @Embedded
+    private PaymentDetails paymentDetails=new PaymentDetails();
+
+
 
     public OrderItem() {
         // TODO Auto-generated constructor stub

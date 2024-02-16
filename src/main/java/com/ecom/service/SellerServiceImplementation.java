@@ -1,17 +1,24 @@
 package com.ecom.service;
 
-import com.ecom.modal.Product;
-import com.ecom.modal.Seller;
-import com.ecom.modal.Shop;
+import com.ecom.config.JwtTokenProvider;
+import com.ecom.exception.UserException;
+import com.ecom.modal.*;
+import com.ecom.repository.OrderItemRepository;
+import com.ecom.repository.OrderRepository;
 import com.ecom.repository.ProductRepository;
 import com.ecom.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SellerServiceImplementation implements SellerService {
 
@@ -20,6 +27,34 @@ public class SellerServiceImplementation implements SellerService {
 
     @Autowired
     private SellerRepository sellerRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+
+    private OrderItemRepository orderItemRepository;
+
+    @Override
+    public Seller findSellerProfileByJwt(String jwt) throws UserException {
+        System.out.println("user service");
+        String email=jwtTokenProvider.getEmailFromJwtToken(jwt);
+
+        System.out.println("email"+email);
+
+        Seller seller = sellerRepository.findByEmail(email);
+
+
+
+        if(seller==null) {
+            throw new UserException("user not exist with email "+email);
+        }
+        System.out.println("email user"+seller.getEmail());
+        return seller;
+    }
 
     @Override
     public List<Product> getAllShopProducts(Long SellerShopId , int pageNumber ,int pageSize) {
@@ -62,6 +97,52 @@ public class SellerServiceImplementation implements SellerService {
         }
 
         return allShops;
+
+
+    }
+
+    @Override
+    public Page<OrderItem> getAllShopOrders(Long sellerShopId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+
+       return orderItemRepository.getShopOrders(sellerShopId,pageable);
+
+        // Create a pageable object with the given page number and page size
+
+//        Page<Order> orders = orderRepository.getAllShopOrders(sellerShopId, pageable);
+//        System.out.println("getallshopOrders");
+//        System.out.println(orders);
+//        Page<Order> filteredOrders = orders.map(order -> {
+//            System.out.println(order);
+//            System.out.println("order");
+//            // Filter order items by sellerShopId
+//            List<OrderItem> filteredOrderItems = order.getOrderItems().stream()
+//                    .filter(item -> item.getSellerId().equals(sellerShopId))
+//                    .collect(Collectors.toList());
+//
+//            // Create a new order with filtered order items
+//            Order filteredOrder = new Order();
+//            filteredOrder.setId(order.getId());
+//            filteredOrder.setShippingAddress(order.getShippingAddress());
+//            filteredOrder.setOrderStatus(order.getOrderStatus());
+//            filteredOrder.setOrderDate(order.getOrderDate());
+//            filteredOrder.setCreatedAt(order.getCreatedAt());
+//            filteredOrder.setPaymentDetails(order.getPaymentDetails());
+//            filteredOrder.setOrderId(order.getOrderId());
+//            filteredOrder.setUser(order.getUser());
+//            filteredOrder.setSellerIds(order.getSellerIds());
+//            filteredOrder.setOrderItems(filteredOrderItems);
+//            // Set other fields as needed
+//
+//            return filteredOrder;
+//        });
+//        System.out.println("filteredOrders");
+//        System.out.println(filteredOrders);
+//
+//        return filteredOrders;
+
+
 
 
     }

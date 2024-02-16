@@ -119,38 +119,66 @@ public class PaymentController {
 
 //
     }
-
-
     @GetMapping("/payments")
     public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, OrderException {
         RazorpayClient razorpay = new RazorpayClient("rzp_test_zdKdiYJLUwgFTZ", "gsTIMDEzxeY3yi6MgFXKr7mU");
-        Order order =orderService.findOrderById(orderId);
+        Order order = orderService.findOrderById(orderId);
 
         try {
-
-
             Payment payment = razorpay.payments.fetch(paymentId);
-            System.out.println("payment details --- "+payment+payment.get("status"));
+            System.out.println("payment details --- " + payment + payment.get("status"));
 
-            if(payment.get("status").equals("captured")) {
-                System.out.println("payment details --- "+payment+payment.get("status"));
+            if (payment.get("status").equals("captured")) {
+                System.out.println("payment details --- " + payment + payment.get("status"));
 
                 order.getPaymentDetails().setPaymentId(paymentId);
                 order.getPaymentDetails().setStatus(PaymentStatus.COMPLETED);
                 order.setOrderStatus(OrderStatus.PLACED);
-//			order.setOrderItems(order.getOrderItems());
-                System.out.println(order.getPaymentDetails().getStatus()+"payment status ");
+                System.out.println(order.getPaymentDetails().getStatus() + "payment status ");
                 orderRepository.save(order);
             }
-            ApiResponse res=new ApiResponse("your order get placed", true);
-            return new ResponseEntity<ApiResponse>(res,HttpStatus.OK);
+            ApiResponse res = new ApiResponse("Your order has been placed.", true);
+            return new ResponseEntity<>(res, HttpStatus.OK);
 
         } catch (Exception e) {
-            System.out.println("errrr payment -------- ");
-            new RedirectView("");
-            throw new RazorpayException(e.getMessage());
+            System.out.println("Error occurred during payment processing: " + e.getMessage());
+            ApiResponse errorResponse = new ApiResponse("An error occurred during payment processing.", false);
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+
+
+//    @GetMapping("/payments")
+//    public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, OrderException {
+//        RazorpayClient razorpay = new RazorpayClient("rzp_test_zdKdiYJLUwgFTZ", "gsTIMDEzxeY3yi6MgFXKr7mU");
+//        Order order =orderService.findOrderById(orderId);
+//
+//        try {
+//
+//
+//            Payment payment = razorpay.payments.fetch(paymentId);
+//            System.out.println("payment details --- "+payment+payment.get("status"));
+//
+//            if(payment.get("status").equals("captured")) {
+//                System.out.println("payment details --- "+payment+payment.get("status"));
+//
+//                order.getPaymentDetails().setPaymentId(paymentId);
+//                order.getPaymentDetails().setStatus(PaymentStatus.COMPLETED);
+//                order.setOrderStatus(OrderStatus.PLACED);
+////			order.setOrderItems(order.getOrderItems());
+//                System.out.println(order.getPaymentDetails().getStatus()+"payment status ");
+//                orderRepository.save(order);
+//            }
+//            ApiResponse res=new ApiResponse("your order get placed", true);
+//            return new ResponseEntity<ApiResponse>(res,HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            System.out.println("errrr payment -------- ");
+//            new RedirectView("");
+//            throw new RazorpayException(e.getMessage());
+//        }
+//
+//    }
 
 }

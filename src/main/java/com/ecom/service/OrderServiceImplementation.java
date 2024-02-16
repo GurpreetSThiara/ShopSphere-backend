@@ -47,12 +47,29 @@ public class OrderServiceImplementation implements OrderService {
 		
 		Cart cart=cartService.findUserCart(user.getId());
 		List<OrderItem> orderItems=new ArrayList<>();
-		
+		Order createdOrder=new Order();
+		SellerOrders sellerOrders = new SellerOrders();
+		List<Long> ids = new ArrayList<>();
+
+
 		for(CartItem item: cart.getCartItems()) {
 			OrderItem orderItem=new OrderItem();
 			
 			orderItem.setPrice(item.getPrice());
 			orderItem.setProduct(item.getProduct());
+			orderItem.setOrderStatus(OrderStatus.PENDING);
+			orderItem.getPaymentDetails().setStatus(PaymentStatus.PENDING);
+			orderItem.setCreatedAt(LocalDateTime.now());
+			if(item.getProduct().getSellerShopId() == null){
+				orderItem.setSellerId(null);
+
+			}else{
+				orderItem.setSellerId(item.getProduct().getSellerShopId());
+
+				ids.add(item.getProduct().getSellerShopId());
+			}
+
+
 			orderItem.setQuantity(item.getQuantity());
 			orderItem.setSize(item.getSize());
 			orderItem.setUserId(item.getUserId());
@@ -65,13 +82,14 @@ public class OrderServiceImplementation implements OrderService {
 		}
 		
 		
-		Order createdOrder=new Order();
+
 		createdOrder.setUser(user);
 		createdOrder.setOrderItems(orderItems);
 		createdOrder.setTotalPrice(cart.getTotalPrice());
 		createdOrder.setTotalDiscountedPrice(cart.getTotalDiscountedPrice());
 		createdOrder.setDiscounte(cart.getDiscounte());
 		createdOrder.setTotalItem(cart.getTotalItem());
+		createdOrder.setSellerIds(ids);
 		
 		createdOrder.setShippingAddress(address);
 		createdOrder.setOrderDate(LocalDateTime.now());
@@ -146,9 +164,9 @@ public class OrderServiceImplementation implements OrderService {
 
 	@Override
 	public List<Order> getAllOrders() {
-		
 		return orderRepository.findAll();
 	}
+
 
 	@Override
 	public void deleteOrder(Long orderId) throws OrderException {

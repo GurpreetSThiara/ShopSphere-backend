@@ -77,7 +77,7 @@ public class AuthController {
 	        
 	        String token = jwtTokenProvider.generateToken(authentication);
 
-	        AuthResponse authResponse= new AuthResponse(token,true);
+	        AuthResponse authResponse= new AuthResponse(token,true,email);
 			
 	        return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
 		
@@ -99,6 +99,7 @@ public class AuthController {
 		
 		authResponse.setStatus(true);
 		authResponse.setJwt(token);
+		authResponse.setEmail(username);
 		
         return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.OK);
     }

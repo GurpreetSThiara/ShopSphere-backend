@@ -23,6 +23,21 @@ public class Order {
     @ManyToOne
     private User user;
 
+
+    private List<Long> sellerIds;
+
+    public void addSellerId(Long id){
+        sellerIds.add(id);
+    }
+
+    public List<Long> getSellerIds(){
+        return sellerIds;
+    }
+
+    public void setSellerIds(List<Long> ids){
+        this.sellerIds=ids;
+    }
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 

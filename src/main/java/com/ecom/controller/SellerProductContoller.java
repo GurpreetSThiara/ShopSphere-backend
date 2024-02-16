@@ -2,7 +2,9 @@ package com.ecom.controller;
 
 import com.ecom.config.JwtTokenProvider;
 import com.ecom.exception.ProductException;
+import com.ecom.exception.UserException;
 import com.ecom.modal.Product;
+import com.ecom.modal.Seller;
 import com.ecom.repository.ProductRepository;
 import com.ecom.request.CreateProductRequest;
 import com.ecom.response.ApiResponse;
@@ -28,18 +30,35 @@ public class SellerProductContoller {
     @Autowired
     private SellerService sellerService;
 
+
     @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+
+
     @GetMapping("/{sellerShopId}")
-    public ResponseEntity<List<Product>> getAllShopProducts(@PathVariable Long sellerShopId, @RequestParam  int pageNumber ,@RequestParam int pageSize) throws  ProductException{
+    public ResponseEntity<List<Product>> getAllShopProductsUsingId(@PathVariable Long sellerShopId, @RequestParam  int pageNumber ,@RequestParam int pageSize) throws  ProductException{
 
         List<Product> products = sellerService.getAllShopProducts(sellerShopId,pageNumber,pageSize);
 
         return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Product>> getAllShopProductsUsingJwt(@RequestHeader String Authorization, @RequestParam  int pageNumber ,@RequestParam int pageSize) throws ProductException, UserException {
+
+
+       Seller seller =  sellerService.findSellerProfileByJwt(Authorization);
+       if(seller != null){
+        List<Product> products = sellerService.getAllShopProducts(seller.getSellerShopId(),pageNumber,pageSize);
+
+
+           return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
+       }
+       return null;
     }
 
     @PostMapping("/create")
@@ -55,15 +74,14 @@ public class SellerProductContoller {
 
         // Now jwtToken is a String containing the JWT token
 
-        System.out.println(Authorization);
-
             String email = jwtTokenProvider.getEmailFromJwtToken(Authorization);
         System.out.println(email);
 
             Product createdProduct = productService.createProduct(req , email);
         System.out.println(createdProduct);
 
-            return new ResponseEntity<Product>(createdProduct, HttpStatus.ACCEPTED);
+
+        return new ResponseEntity<Product>(createdProduct, HttpStatus.ACCEPTED);
 
 
 
@@ -82,6 +100,8 @@ public class SellerProductContoller {
         return new ResponseEntity<ApiResponse>(res,HttpStatus.ACCEPTED);
 
     }
+
+
 
 
 }
