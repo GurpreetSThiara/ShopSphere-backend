@@ -6,7 +6,9 @@ import com.ecom.modal.CartItem;
 import com.ecom.modal.Product;
 import com.ecom.modal.User;
 import com.ecom.repository.CartRepository;
+import com.ecom.repository.UserInteractionRepository;
 import com.ecom.request.AddItemRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +17,9 @@ public class CartServiceImplementation implements CartService{
 	private CartRepository cartRepository;
 	private CartItemService cartItemService;
 	private ProductService productService;
+
+	@Autowired
+	private UserInteractionRepository userInteractionRepository;
 	
 	
 	public CartServiceImplementation(CartRepository cartRepository,CartItemService cartItemService,

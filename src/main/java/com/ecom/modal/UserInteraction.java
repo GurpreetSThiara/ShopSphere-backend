@@ -4,11 +4,20 @@ package com.ecom.modal;
 import com.ecom.user.domain.UserActions;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "user_interaction")
 public class UserInteraction {
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long interactionId;
@@ -21,9 +30,19 @@ public class UserInteraction {
 
     private UserActions action;
 
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
-    UserInteraction(){
+    private Long productId;
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public  UserInteraction(){
 
     }
 
@@ -59,11 +78,5 @@ public class UserInteraction {
         this.action = action;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
 }

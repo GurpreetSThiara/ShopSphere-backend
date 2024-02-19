@@ -1,15 +1,16 @@
 package com.ecom.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.ecom.exception.CartItemException;
 import com.ecom.exception.UserException;
-import com.ecom.modal.Cart;
-import com.ecom.modal.CartItem;
-import com.ecom.modal.Product;
-import com.ecom.modal.User;
+import com.ecom.modal.*;
 import com.ecom.repository.CartItemRepository;
 import com.ecom.repository.CartRepository;
+import com.ecom.repository.UserInteractionRepository;
+import com.ecom.user.domain.UserActions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class CartItemServiceImplementation implements CartItemService {
 	private CartItemRepository cartItemRepository;
 	private UserService userService;
 	private CartRepository cartRepository;
+
+	@Autowired
+	private UserInteractionRepository userInteractionRepository;
 	
 	public CartItemServiceImplementation(CartItemRepository cartItemRepository,UserService userService) {
 		this.cartItemRepository=cartItemRepository;
@@ -32,6 +36,14 @@ public class CartItemServiceImplementation implements CartItemService {
 		cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()*cartItem.getQuantity());
 		
 		CartItem createdCartItem=cartItemRepository.save(cartItem);
+
+		UserInteraction userInteraction = new UserInteraction();
+		userInteraction.setUserId(createdCartItem.getUserId());
+		userInteraction.setSellerId(createdCartItem.getProduct().getSellerShopId());
+		userInteraction.setTimestamp(LocalDateTime.now());
+		userInteraction.setAction(UserActions.ADD_TO_CART);
+		userInteraction.setProductId(createdCartItem.getProduct().getId());
+		userInteractionRepository.save(userInteraction);
 		
 		return createdCartItem;
 	}
@@ -63,7 +75,8 @@ public class CartItemServiceImplementation implements CartItemService {
 	public CartItem isCartItemExist(Cart cart, Product product, String size, Long userId) {
 		
 		CartItem cartItem=cartItemRepository.isCartItemExist(cart, product, size, userId);
-		
+
+
 		return cartItem;
 	}
 	
@@ -81,6 +94,14 @@ public class CartItemServiceImplementation implements CartItemService {
 		
 		if(user.getId().equals(reqUser.getId())) {
 			cartItemRepository.deleteById(cartItem.getId());
+			UserInteraction userInteraction = new UserInteraction();
+			userInteraction.setUserId(cartItem.getUserId());
+			userInteraction.setSellerId(cartItem.getProduct().getSellerShopId());
+			userInteraction.setTimestamp(LocalDateTime.now());
+			userInteraction.setAction(UserActions.ADD_TO_CART);
+			userInteraction.setProductId(cartItem.getProduct().getId());
+			userInteractionRepository.save(userInteraction);
+
 		}
 		else {
 			throw new UserException("you can't remove anothor users item");

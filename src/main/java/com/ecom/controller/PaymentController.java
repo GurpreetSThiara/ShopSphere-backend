@@ -87,7 +87,7 @@ public class PaymentController {
 
             // Set the callback URL and method
             paymentLinkRequest.put("callback_url","http://localhost:8080/api/payments");
-            paymentLinkRequest.put("callback_method","get");
+//            paymentLinkRequest.put("callback_method","post");
 
             // Create the payment link using the paymentLink.create() method
             PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
@@ -119,7 +119,7 @@ public class PaymentController {
 
 //
     }
-    @GetMapping("/payments")
+    @PostMapping("/payments")
     public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, OrderException {
         RazorpayClient razorpay = new RazorpayClient("rzp_test_zdKdiYJLUwgFTZ", "gsTIMDEzxeY3yi6MgFXKr7mU");
         Order order = orderService.findOrderById(orderId);

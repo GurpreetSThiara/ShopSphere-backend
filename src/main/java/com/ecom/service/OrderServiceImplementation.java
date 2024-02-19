@@ -2,13 +2,12 @@ package com.ecom.service;
 
 import com.ecom.exception.OrderException;
 import com.ecom.modal.*;
-import com.ecom.repository.AddressRepository;
-import com.ecom.repository.OrderItemRepository;
+import com.ecom.repository.*;
 
-import com.ecom.repository.OrderRepository;
-import com.ecom.repository.UserRepository;
 import com.ecom.user.domain.OrderStatus;
 import com.ecom.user.domain.PaymentStatus;
+import com.ecom.user.domain.UserActions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,17 @@ public class OrderServiceImplementation implements OrderService {
 	private AddressRepository addressRepository;
 	private UserRepository userRepository;
 	private OrderItemService orderItemService;
+
+
+
+	@Autowired
 	private OrderItemRepository orderItemRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
+
+	@Autowired
+	private  UserInteractionRepository userInteractionRepository;
 	
 	public OrderServiceImplementation(OrderRepository orderRepository, CartService cartService,
                                       AddressRepository addressRepository, UserRepository userRepository,
@@ -58,6 +67,7 @@ public class OrderServiceImplementation implements OrderService {
 			orderItem.setPrice(item.getPrice());
 			orderItem.setProduct(item.getProduct());
 			orderItem.setOrderStatus(OrderStatus.PENDING);
+			orderItem.setShippingAddress(address);
 			orderItem.getPaymentDetails().setStatus(PaymentStatus.PENDING);
 			orderItem.setCreatedAt(LocalDateTime.now());
 			if(item.getProduct().getSellerShopId() == null){
@@ -113,6 +123,18 @@ public class OrderServiceImplementation implements OrderService {
 		Order order=findOrderById(orderId);
 		order.setOrderStatus(OrderStatus.PLACED);
 		order.getPaymentDetails().setStatus(PaymentStatus.COMPLETED);
+		for(OrderItem item: order.getOrderItems()){
+			UserInteraction userInteraction = new UserInteraction();
+			userInteraction.setUserId(item.getUserId());
+			userInteraction.setSellerId(item.getSellerId());
+			userInteraction.setTimestamp(item.getCreatedAt());
+			userInteraction.setAction(UserActions.PURCHASE);
+			userInteraction.setProductId(item.getProduct().getId());
+			userInteractionRepository.save(userInteraction);
+
+
+		}
+
 		return order;
 	}
 

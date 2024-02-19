@@ -10,5 +10,6 @@ public enum UserActions {
     PURCHASE,
     RATE,
     ADD_TO_CART,
-    REMOVE_FROM_CART
+    REMOVE_FROM_CART,
+    SHOPVISIT
 }
