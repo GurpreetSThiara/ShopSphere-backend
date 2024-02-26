@@ -45,6 +45,11 @@ public class SellerAuthController {
         this.customSellerDetails = customSellerDetails;
     }
 
+    @PostMapping("/shutdown")
+    public void shutDownShop (){
+
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createSellerHandler(@Valid @RequestBody Seller seller) throws UserException{
 
@@ -56,6 +61,9 @@ public class SellerAuthController {
         String mobile = seller.getMobile();
         String shopName = seller.getShopName();
         String logoUrl = seller.getLogoImageUrl();
+        double longitude = seller.getLongitude();
+        double lattitude = seller.getLatitude();
+        String logo = seller.getLogoImageUrl();
 
 
         Seller isEmailExist=sellerRepository.findByEmail(email);
@@ -73,6 +81,10 @@ public class SellerAuthController {
         createdSeller.setMobile(mobile);
         createdSeller.setShopName(shopName);
         createdSeller.setLogoImageUrl(logoUrl);
+        createdSeller.setShopOpen(true);
+        createdSeller.setLongitude(longitude);
+        createdSeller.setLatitude(lattitude);
+//        createdSeller.setLogoImageUrl(logo);
 
 
 

@@ -36,7 +36,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			@Param("sort") String sort
 			);
 
-	@Query("SELECT p FROM Product p WHERE p.sellerShopId = :sellerShopId")
+	@Query("SELECT p FROM Product p WHERE p.sellerShopId = :sellerShopId ORDER BY p.createdAt DESC")
 	Page<Product> findBySellerShopId(@Param("sellerShopId") Long sellerShopId, Pageable pageable);
 
 

@@ -60,6 +60,16 @@ public class Seller {
     private String closingTime;
     private String daysOfOperation;
 
+    private Boolean isShopOpen;
+
+    public Boolean getShopOpen() {
+        return isShopOpen;
+    }
+
+    public void setShopOpen(Boolean shopOpen) {
+        isShopOpen = shopOpen;
+    }
+
     public Seller(Long sellerShopId, String firstName, String lastName, String email, String mobile, String password, String shopName, String description, String websiteUrl, String logoImageUrl, String streetAddress, String city, String state, String zipCode, String country, double latitude, double longitude, String phoneNumber, String alternatePhoneNumber, String faxNumber, String businessRegistrationNumber, String taxId, String facebookProfile, String twitterProfile, String instagramProfile, String bankAccountDetails, String paypalEmail, String openingTime, String closingTime, String daysOfOperation) {
         this.sellerShopId = sellerShopId;
         this.firstName = firstName;
